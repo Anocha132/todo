@@ -1,53 +1,72 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Hello Vuejs</title>
+	<script defer scr="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+	<link rel="stylesheet" type="text/css" href="node_modules/bulma/css/bulma.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 </head>
 <body>
 
 	<main id="app">
-		<input type="text" v-model="task">
-		<button @click="saveTask">submit</button>
-
-		<table style="width:100%" border="1">
-			<thead>
-				<tr>
-					<th>No.</th>
-					<th>todo</th>
-					<th>Time</th>
-					<th>Delete</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr v-for="(todo, index) in todos">
-					<td>{{index+1}}</td>
-					<td>{{todo.todo}}</td>
-					<td>{{todo.createdAt}}</td>
-					<td>
-						<button @click="removeTask(index)">Delete</button>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<section class="section">
+			<div class="container">
+				<h1 class="title has-text-centered">Todo</h1>
+				<form @submit.prevent="saveTask">
+					<div class="field is-grouped is-grouped-centered">
+						<div class="control">
+							<input class="input" type="text" v-model="task" placeholder="Text">
+						</div>
+						<a class="button is-success"> Submit </a>
+					</div>
+				</form>
+				<div class="field has-addons has-addons-centered">
+					<table class="table is-fullwidth">
+						<thead>
+							<tr>
+								<th><abbr title="Number">No.</abbr></th>
+								<th><abbr title="Todo">Todo</abbr></th>
+								<th><abbr title="Time">Time</abbr></th>
+								<th><abbr title="Delete">Delete</abbr></th>
+							</tr>
+						</thead>
+						<tfoot>
+							<tr>
+								<th><abbr title="Number">No.</abbr></th>
+								<th><abbr title="Todo">Todo</abbr></th>
+								<th><abbr title="Time">Time</abbr></th>
+								<th><abbr title="Delete">Delete</abbr></th>
+							</tr>
+						</tfoot>
+						<tbody>
+							<tr v-for="(todo, index) in todos">
+								<td>{{index+1}}</td>
+								<td>{{todo.todo}}</td>
+								<td>{{$moment(todo.createdAt).format('DD/MM/YYYY')}}</td>
+								<td>
+									<a class="button is-danger" @click="removeTask(index)">Delete
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</section>
 	</main>
 
 	<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	<script type="text/javascript" src="node_modules/moment/moment.js"></script>
 	<script type="text/javascript">
+		Vue.prototype.$moment = moment;
 
 		var app = new Vue({
 			el: '#app',
 			data: {
 				task: null,
-				todos: [
-					{
-						todo: 'task 1',
-						createdAt: '2018-01-19 16:44:00'
-					},
-					{
-						todo: 'task 2',
-						createdAt: '2018-01-19 16:45:00'
-					}
-				]
+				todos: []
 			},
 			methods: {
 				saveTask: function () {
@@ -59,8 +78,7 @@
 					this.task = null
 				},
 				removeTask: function (index) {
-					this.todos.splice(this.index, 1)
-
+					this.todos.splice(index, 1)
 				}
 			}
 		})
